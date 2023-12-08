@@ -29,6 +29,9 @@ public class BooksController {
         return new ResponseEntity<>(bookService.editBook(books), HttpStatus.OK);
     }
 
-
+    @GetMapping("/books")
+    public ResponseEntity<?> getBooks(@RequestParam("book_id")int book_id){
+        return new ResponseEntity<>(bookService.getBook(book_id), HttpStatus.OK);
+    }
 
 }
