@@ -43,4 +43,9 @@ public class AdminController {
     public ResponseEntity<?> addStock(@RequestParam(name = "book_id") int book_id,@RequestParam("quantity") int quantity){
         return new ResponseEntity<>(booksService.addStock(book_id,quantity), HttpStatus.OK);
     }
+    @DeleteMapping("/delete/books")
+    public ResponseEntity<?> delBook(@RequestParam("book_id") int book_id){
+        booksService.delBook(book_id);
+        return new ResponseEntity<>("Deleted", HttpStatus.OK);
+    }
 }
