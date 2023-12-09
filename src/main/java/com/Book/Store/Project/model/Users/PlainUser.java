@@ -1,6 +1,7 @@
 package com.Book.Store.Project.model.Users;
 
 
+import com.Book.Store.Project.model.Orders;
 import com.Book.Store.Project.model.Review;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -34,4 +35,9 @@ public class PlainUser {
     @OneToMany(mappedBy = "user")
     @JsonIgnore
     List<Review> reviews;
+
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    List<Orders> orders;
+
 }
