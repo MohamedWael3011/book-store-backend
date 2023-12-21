@@ -1,6 +1,7 @@
 package com.Book.Store.Project.model.Users;
 
 
+import com.Book.Store.Project.model.Cart;
 import com.Book.Store.Project.model.Orders;
 import com.Book.Store.Project.model.Review;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -39,5 +40,9 @@ public class PlainUser {
     @OneToMany(mappedBy = "user")
     @JsonIgnore
     List<Orders> orders;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Cart cart;
+
 
 }

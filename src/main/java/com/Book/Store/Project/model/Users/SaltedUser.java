@@ -17,7 +17,7 @@ public class SaltedUser extends PlainUser {
 
     public SaltedUser(PlainUser decoratedUser, String salt) {
         super(decoratedUser.getId(), decoratedUser.getUsername(), decoratedUser.getPassword(),
-                decoratedUser.getPhone(), decoratedUser.getAddress(), decoratedUser.getReviews(),decoratedUser.getOrders());
+                decoratedUser.getPhone(), decoratedUser.getAddress(), decoratedUser.getReviews(),decoratedUser.getOrders(),decoratedUser.getCart());
         this.salt = salt;
     }
 }

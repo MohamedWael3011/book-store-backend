@@ -53,6 +53,8 @@ public class Books  {
     @JoinColumn(name = "genre_id")
     Genre genre;
 
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
+    private List<CartItem> cartItems;
     @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.PERSIST)
     @JoinColumn(name = "author_id")
     Author author;
