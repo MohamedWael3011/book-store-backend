@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface UsersService {
 
-    PlainUser addUser(PlainUser user) throws NoSuchAlgorithmException;
+    UserDTO addUser(PlainUser user) throws NoSuchAlgorithmException;
     void delUser(int user_id);
     List<UserDTO> getUsers();
 

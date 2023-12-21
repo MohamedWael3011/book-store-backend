@@ -19,7 +19,24 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Books implements Cloneable {
+public class Books  {
+    @Override
+    public String toString() {
+        return "Books{" +
+                "id=" + id +
+                ", book_name='" + book_name + '\'' +
+                ", description='" + description + '\'' +
+                ", num_sales=" + num_sales +
+                ", rates=" + rates +
+                ", price=" + price +
+                ", quantity_in_stock=" + quantity_in_stock +
+                ", image_url='" + image_url + '\'' +
+                ", genre=" + genre +
+                ", author=" + author +
+                ", reviews=" + reviews +
+                '}';
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "book_id")
@@ -32,23 +49,15 @@ public class Books implements Cloneable {
     private int quantity_in_stock;
     private String image_url;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.PERSIST)
     @JoinColumn(name = "genre_id")
     Genre genre;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.PERSIST)
     @JoinColumn(name = "author_id")
     Author author;
 
     @OneToMany(mappedBy = "book")
     List<Review> reviews;
 
-    @Override
-    public Object clone() {
-        try {
-            return super.clone();
-        } catch (CloneNotSupportedException e) {
-            throw new InternalError(e);
-        }
-    }
 }

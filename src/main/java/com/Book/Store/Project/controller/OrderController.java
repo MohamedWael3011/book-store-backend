@@ -25,6 +25,33 @@ public class OrderController {
             return new ResponseEntity<>("Invalid Transaction", HttpStatus.NOT_ACCEPTABLE);
         }
         return new ResponseEntity<>(orders ,HttpStatus.OK);
+    }
+
+    @DeleteMapping("/delete")
+    ResponseEntity<?> cancelOrder (@RequestParam(name = "order_id") int order_id,@RequestParam(name = "user_id") int user_id){
+        int status = orderService.delOrder(order_id,user_id);
+        if(status == -1) {
+            return new ResponseEntity<>("There is no order with that ID", HttpStatus.NOT_FOUND);
+        }
+        else if(status == 0){
+            return new ResponseEntity<>("This isn't your order", HttpStatus.UNAUTHORIZED);
+
+        }
+        else if(status == 2){
+            return new ResponseEntity<>("Order can't be cancelled now, two days has been passed", HttpStatus.UNAUTHORIZED);
+
+        }
+        return new ResponseEntity<>("Order has been cancelled successfully", HttpStatus.OK);
 
     }
+
+    @GetMapping("/get/all")
+    ResponseEntity<?> getAllOrders(){
+        return  new ResponseEntity<>(orderService.getOrders(),HttpStatus.OK);
+    }
+    @GetMapping("/get/byUser")
+    ResponseEntity<?> getOrderUser(@RequestParam(name = "user_id") int user_id){
+        return  new ResponseEntity<>(orderService.getOrdersByUser(user_id),HttpStatus.OK);
+    }
+
 }

@@ -1,0 +1,199 @@
+@startuml
+
+!define ENTITY class
+!define PRIMARY_KEY_FIELD {+ {field} primaryKey}
+!define FOREIGN_KEY_FIELD {+ {field} foreignKey}
+!define AGGREGATION ---
+
+' Define entities
+ENTITY Author {
+  author_id: int primaryKey
+  author_name: String
+
+   +Author(authorId: int, authorName: String): void
+  {method} +setAuthorId(authorId: int): void
+  {method} +getAuthorId(): int
+  {method} +setAuthorName(authorName: String): void
+  {method} +getAuthorName(): String
+}
+
+ENTITY Genre {
+  genre_id: int primaryKey
+  genre: String unique
+
+  +Genre(genreId: int, genre: String): void
+  {method} +setGenreId(genreId: int): void
+  {method} +getGenreId(): int
+  {method} +setGenre(genre: String): void
+  {method} +getGenre(): String
+}
+
+ENTITY Books {
+  book_id: int primaryKey
+  book_name: String
+  description: String
+  num_sales: int
+  rates: int
+  price: float
+  image_url: String
+  genre: String
+  quantity_in_stock: int
+  author_id: int foreignKey
+ +Books(bookId: int, bookName: String, description: String, numSales: int, rates: int, price: float, imageUrl: String, genre: String, quantityInStock: int, authorId: int): void
+  {method} +setBookId(bookId: int): void
+  {method} +getBookId(): int
+  {method} +setBookName(bookName: String): void
+  {method} +getBookName(): String
+  {method} +setDescription(description: String): void
+  {method} +getDescription(): String
+  {method} +setNumSales(numSales: int): void
+  {method} +getNumSales(): int
+  {method} +setRates(rates: int): void
+  {method} +getRates(): int
+  {method} +setPrice(price: float): void
+  {method} +getPrice(): float
+  {method} +setImageUrl(imageUrl: String): void
+  {method} +getImageUrl(): String
+  {method} +setGenre(genre: String): void
+  {method} +getGenre(): String
+  {method} +setQuantityInStock(quantityInStock: int): void
+  {method} +getQuantityInStock(): int
+  {method} +setAuthorId(authorId: int): void
+  {method} +getAuthorId(): int
+}
+
+ENTITY Users {
+  user_id: int primaryKey
+  username: String unique
+  password: String
+  address: String
+  phone: int
+
+ +Users(userId: int, username: String, password: String, address: String, phone: int): void
+  {method} +setUserId(userId: int): void
+  {method} +getUserId(): int
+  {method} +setUsername(username: String): void
+  {method} +getUsername(): String
+  {method} +setPassword(password: String): void
+  {method} +getPassword(): String
+  {method} +setAddress(address: String): void
+  {method} +getAddress(): String
+  {method} +setPhone(phone: int): void
+  {method} +getPhone(): int
+}
+
+ENTITY Review {
+  review_id: int primaryKey
+  user_id: int foreignKey
+  book_id: int foreignKey
+  review_content: String
+  rating: float
+
+  +Review(reviewId: int, userId: int, bookId: int, reviewContent: String, rating: float): void
+  {method} +setReviewId(reviewId: int): void
+  {method} +getReviewId(): int
+  {method} +setUserId(userId: int): void
+  {method} +getUserId(): int
+  {method} +setBookId(bookId: int): void
+  {method} +getBookId(): int
+  {method} +setReviewContent(reviewContent: String): void
+  {method} +getReviewContent(): String
+  {method} +setRating(rating: float): void
+  {method} +getRating(): float
+}
+
+ENTITY Orders {
+  order_id: int primaryKey
+  user_id: int foreignKey
+  order_date: DateTime
+
+  {method} +setOrderId(orderId: int): void
+  {method} +getOrderId(): int
+  {method} +setUserId(userId: int): void
+  {method} +getUserId(): int
+  {method} +setOrderDate(orderDate: DateTime): void
+  {method} +getOrderDate(): DateTime
+  +Order_Book(orderId: int, bookId: int, quantity: int): void
+
+}
+
+ENTITY Order_Book {
+  order_id: int
+  book_id: int
+  quantity: int
+  +Order_Book(orderId: int, bookId: int, quantity: int): void
+  {method} +setOrderId(orderId: int): void
+  {method} +getOrderId(): int
+  {method} +setBookId(bookId: int): void
+  {method} +getBookId(): int
+  {method} +setQuantity(quantity: int): void
+  {method} +getQuantity(): int
+}
+
+ENTITY Payment {
+  payment_id: int primaryKey
+  order_id: int foreignKey
+  payment_method: String
+  payment_amount: Decimal
+  +Payment(paymentId: int, orderId: int, paymentMethod: String, paymentAmount: Decimal): void
+  {method} +setPaymentId(paymentId: int): void
+  {method} +getPaymentId(): int
+  {method} +setOrderId(orderId: int): void
+  {method} +getOrderId(): int
+  {method} +setPaymentMethod(paymentMethod: String): void
+  {method} +getPaymentMethod(): String
+  {method} +setPaymentAmount(paymentAmount: Decimal): void
+  {method} +getPaymentAmount(): Decimal
+}
+
+ENTITY PlainUser {
+  id: int primaryKey
+  username: String
+  password: String
+  phone: int
+  address: String
+  reviews: List<Review>
+  orders: List<Orders>
+
+  +PlainUser(id: int, username: String, password: String, phone: int, address: String, reviews: List<Review>, orders: List<Orders>): void
+  {method} +setId(id: int): void
+  {method} +getId(): int
+  {method} +setUsername(username: String): void
+  {method} +getUsername(): String
+  {method} +setPassword(password: String): void
+  {method} +getPassword(): String
+  {method} +setPhone(phone: int): void
+  {method} +getPhone(): int
+  {method} +setAddress(address: String): void
+  {method} +getAddress(): String
+  {method} +setReviews(reviews: List<Review>): void
+  {method} +getReviews(): List<Review>
+  {method} +setOrders(orders: List<Orders>): void
+  {method} +getOrders(): List<Orders>
+
+}
+
+ENTITY SaltedUser {
+  salt: String
+  +SaltedUser(decoratedUser: PlainUser, salt: String): void
+  {method} +setSalt(salt: String): void
+  {method} +getSalt(): String
+
+}
+
+' Define relationships
+Author --o Books: has (0..*)
+Books --o Order_Book: has (1..*)
+Genre --o Books: has (0..*)
+Users --o Orders: has (0..*)
+Books --o Review: has (0..*)
+Users --o Review: has (0..*)
+Orders --o Order_Book: has (0..*)
+Orders --o Payment: has (0..*)
+PlainUser --o Review: has (0..*)
+PlainUser --o Orders: has (0..*)
+PlainUser <|-- SaltedUser
+
+
+
+@enduml

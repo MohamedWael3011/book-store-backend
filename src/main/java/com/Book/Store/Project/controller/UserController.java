@@ -32,7 +32,7 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<?> addAuthor(@RequestBody PlainUser user) throws NoSuchAlgorithmException {
 
-        PlainUser register = usersService.addUser(user);
+        UserDTO register = usersService.addUser(user);
         if (register == null){
            Map<String, String> response = new HashMap<>();
             response.put("error", "Register Failed, Username already exists.");

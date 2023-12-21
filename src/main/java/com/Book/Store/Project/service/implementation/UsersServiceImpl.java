@@ -21,7 +21,7 @@ public class UsersServiceImpl implements UsersService {
     private UsersRepository usersRepository;
 
     @Override
-    public PlainUser addUser(PlainUser user) throws NoSuchAlgorithmException {
+    public UserDTO addUser(PlainUser user) throws NoSuchAlgorithmException {
         try {
             // Check if the username already exists
             if (usersRepository.findByUsername(user.getUsername()) != null) {
@@ -31,9 +31,9 @@ public class UsersServiceImpl implements UsersService {
             String salt = generateRandomString(20);
             SaltedUser saltedUser = new SaltedUser(user, salt);
             saltedUser.setPassword(HashGenerator.toHexString(HashGenerator.getSHA(saltedUser.getPassword() + salt)));
-            usersRepository.save(saltedUser);
+            SaltedUser savedUser = usersRepository.save(saltedUser);
 
-            return user;
+            return new UserDTO(savedUser.getId(),savedUser.getUsername(),savedUser.getPhone(),savedUser.getAddress());
         } catch (Exception e) {
             throw new RuntimeException("Error adding user", e);
         }

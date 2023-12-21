@@ -39,6 +39,6 @@ public class GenreInterfaceImpl implements GenreService {
 
     @Override
     public Genre getGenre(String genreName) {
-        return null;
+        return genreRepository.findByName(genreName);
     }
 }

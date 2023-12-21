@@ -25,4 +25,8 @@ public class AuthorController {
     public ResponseEntity<?> addAuthor(@RequestBody Author author){
         return new ResponseEntity<>(authorService.addAuthor(author), HttpStatus.OK);
     }
+    @GetMapping("/get")
+    public ResponseEntity<?> addAuthor(@RequestParam(name = "author_name") String name){
+        return new ResponseEntity<>(authorService.getAuthorByName(name), HttpStatus.OK);
+    }
 }

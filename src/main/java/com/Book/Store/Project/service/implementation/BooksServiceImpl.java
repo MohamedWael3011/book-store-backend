@@ -1,5 +1,6 @@
 package com.Book.Store.Project.service.implementation;
 
+import com.Book.Store.Project.model.Author;
 import com.Book.Store.Project.model.Books;
 import com.Book.Store.Project.repository.AuthorRepository;
 import com.Book.Store.Project.repository.GenreRepository;
@@ -51,10 +52,13 @@ public class BooksServiceImpl implements BooksService {
 
     @Override
     public Books editBook(Books book) {
+        System.out.println(book);
         Books b = booksRepository.findById(book.getId()).orElseThrow(() -> {
             return new RuntimeException("There is no Book with this ID");
         });
-         return booksRepository.saveAndFlush(book);
+        Author author = authorRepository.findByName(book.getAuthor().getName());
+        book.setAuthor(author);
+        return booksRepository.saveAndFlush(book);
     }
 
     @Override

@@ -24,6 +24,7 @@ public class Orders {
     private int id;
 
     private Date order_date;
+    private String order_status;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     SaltedUser user;

@@ -5,6 +5,7 @@ import com.Book.Store.Project.model.Books;
 import com.Book.Store.Project.model.Order_Book;
 import com.Book.Store.Project.model.Orders;
 import com.Book.Store.Project.model.Payment;
+import com.Book.Store.Project.model.Users.PlainUser;
 import com.Book.Store.Project.model.Users.SaltedUser;
 import com.Book.Store.Project.repository.OrderBookRepository;
 import com.Book.Store.Project.repository.OrdersRepository;
@@ -77,4 +78,51 @@ public class OrderServiceImpl implements OrderService {
         return orders;
 
     }
+
+    @Override
+    public List<Orders> getOrders() {
+        return ordersRepository.findAll();
+    }
+
+    @Override
+    public Orders getOrder(int order_id) {
+        Optional<Orders> order =  ordersRepository.findById(order_id);
+        return order.orElse(null);
+    }
+
+    @Override
+    public int delOrder(int order_id, int user_id) {
+        Orders order = getOrder(order_id);
+        if(order == null){
+            return -1;
+        }
+        else if(order.getUser().getId() != user_id){
+            return 0;
+        }
+        else{
+            long difference_In_Time = order.getOrder_date().getTime() - Date.from(Instant.now()).getTime();
+            long difference_In_Days
+                    = (difference_In_Time
+                    / (1000 * 60 * 60 * 24))
+                    % 365;
+
+            if(difference_In_Days <= 2) {
+                ordersRepository.deleteById(order_id);
+                return 1;
+            }
+            return 2;
+        }
+    }
+
+    @Override
+    public List<Orders> getOrdersByUser(int user_id) {
+        Optional<SaltedUser> orderUser = usersRepository.findById(user_id);
+        if(orderUser.isPresent()){
+            List<Orders> orders = ordersRepository.findByUser(orderUser.get());
+            return orders;
+        }
+        return null;
+    }
+
+
 }

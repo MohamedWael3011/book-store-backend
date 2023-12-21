@@ -17,10 +17,20 @@ import java.util.Set;
 @Entity
 @Table
 public class Author {
+    @Override
+    public String toString() {
+        return "Author{" +
+                "author_id=" + author_id +
+                ", name='" + name + '\'' +
+                ", books=" + books +
+                '}';
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int author_id;
-    String author_name;
+    @Column(name = "author_name")
+    String name;
     @OneToMany(mappedBy = "author")
     @JsonIgnore
     Set<Books> books;
