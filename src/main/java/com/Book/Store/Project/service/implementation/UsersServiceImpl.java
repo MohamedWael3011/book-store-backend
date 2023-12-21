@@ -55,7 +55,7 @@ public class UsersServiceImpl implements UsersService {
     @Override
     public UserDTO getUser(int user_id) {
         PlainUser user = usersRepository.findById(user_id).orElseThrow(() -> {
-            return new RuntimeException("There is no Book with this ID");
+            return new RuntimeException("There is no User with this ID");
         });
         return  new UserDTO(user);
     }

@@ -44,7 +44,9 @@ public class UserController {
     @PostMapping("/login")
     public  ResponseEntity<?> login(@RequestBody PlainUser user) throws NoSuchAlgorithmException {
         Integer loginSuccess = proxyService.login(user);
-
+        if(loginSuccess == -2){
+            return  new ResponseEntity<>(user, HttpStatus.OK);
+        }
         if (loginSuccess != -1) {
             UserDTO userDTO = usersService.getUser(loginSuccess);
             return new ResponseEntity<>(userDTO, HttpStatus.OK);
