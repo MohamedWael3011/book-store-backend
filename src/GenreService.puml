@@ -1,0 +1,16 @@
+@startuml
+
+interface GenreService {
+    +addGenre(genre: Genre): Genre
+    +delGenre(genreID: int): boolean
+    +getGenres(): List<Genre>
+    +getGenre(genreName: String): Genre
+}
+
+class Genre {
+    +id: int
+    +name: String
+}
+
+GenreService --> Genre: Uses
+@enduml

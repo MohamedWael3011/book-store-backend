@@ -1,0 +1,17 @@
+@startuml
+
+interface ProxyService {
+    +login(user: PlainUser):void
+}
+
+class PlainUser {
+    +id: int
+    +username: String
+    +password: String
+    +phone: int
+    +address: String
+}
+
+ProxyService --> PlainUser: Uses
+
+@enduml

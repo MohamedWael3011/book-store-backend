@@ -1,0 +1,49 @@
+@startuml
+
+class UsersServiceImpl {
+    -usersRepository: UsersRepository
+    +addUser(user: PlainUser): UserDTO
+    +delUser(user_id: int): void
+    +getUsers(): List<UserDTO>
+    +getUser(user_id: int): UserDTO
+}
+
+class UserDTO {
+    +id: int
+    +username: String
+    +phone: int
+    +address: String
+}
+
+class HashGenerator {
+    +getSHA(input: String): byte[]
+    +toHexString(hash: byte[]): String
+}
+
+class SaltedUser {
+    +id: int
+    +username: String
+    +password: String
+    +salt: String
+}
+
+class PlainUser {
+    +username: String
+    +password: String
+    +phone: int
+    +address: String
+}
+
+class UsersRepository {
+    +findByUsername(username: String): SaltedUser
+    +findById(user_id: int): PlainUser
+    +findAll(): List<SaltedUser>
+}
+
+UsersServiceImpl --o UsersRepository
+UsersServiceImpl --o UserDTO
+UsersServiceImpl --o HashGenerator
+UsersServiceImpl --o SaltedUser
+UsersServiceImpl --o PlainUser
+
+@enduml

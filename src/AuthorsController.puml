@@ -1,0 +1,39 @@
+@startuml
+
+!define ENTITY class
+!define PRIMARY_KEY_FIELD {+ {field} primaryKey}
+!define FOREIGN_KEY_FIELD {+ {field} foreignKey}
+!define AGGREGATION ---
+
+' Define entities
+ENTITY AuthorController {
+  authorService: AuthorService
+
+  +getAllBooks(): ResponseEntity<?>
+  +addAuthor(author: Author): ResponseEntity<?>
+  +getAuthorByName(name: String): ResponseEntity<?>
+}
+
+ENTITY AuthorService {
+  
+  {method}+getAuthors():list<Author>
+  {method} +addAuthor (author:author):author
+    {method} +getAuthorByName (name:String):author
+}
+
+ENTITY Author {
+  author_id: int primaryKey
+  author_name: String
+
+  +Author(authorId: int, authorName: String): void
+  {method} +setAuthorId(authorId: int): void
+  {method} +getAuthorId(): int
+  {method} +setAuthorName(authorName: String): void
+  {method} +getAuthorName(): String
+}
+
+' Define relationships
+AuthorController --o AuthorService: has
+AuthorController --o Author: uses
+
+@enduml

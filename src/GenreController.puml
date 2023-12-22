@@ -1,0 +1,39 @@
+@startuml
+
+!define ENTITY class
+!define PRIMARY_KEY_FIELD {+ {field} primaryKey}
+!define FOREIGN_KEY_FIELD {+ {field} foreignKey}
+!define AGGREGATION ---
+
+' Define entities
+ENTITY GenreController {
+  genreService: GenreService
+  +getGenres(): ResponseEntity<?>
+  +getGenreByName(name: String): ResponseEntity<?>
+}
+
+ENTITY GenreService {
+    {method}+delGenre(genreID:int):boolean;
+    {method}+addGenre(genre:Genre):Genre;
+    {method}+getGenres(): List<Genre>
+    {method}+getGenre(name: String): Genre
+}
+
+
+
+ENTITY Genre {
+  genre_id: int primaryKey
+  genre: String unique
+
+  +Genre(genreId: int, genre: String): void
+  {method} +setGenreId(genreId: int): void
+  {method} +getGenreId(): int
+  {method} +setGenre(genre: String): void
+  {method} +getGenre(): String
+}
+
+' Define relationships
+GenreController --o GenreService: uses
+GenreService --o Genre: returns (List)
+
+@enduml

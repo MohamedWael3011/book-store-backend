@@ -1,0 +1,20 @@
+@startuml
+
+interface CartService {
+    +addItem(user_id: int, book: OrderedBooksDTO): CartItem
+    +removeItem(cart_id: int, book_id: int): void
+}
+
+class CartItem {
+    +cartItemId: CartItemId
+    +quantity: int
+}
+
+class CartItemId {
+    +cartId: int
+    +bookId: int
+}
+
+CartService --> CartItem: Uses
+CartItem --> CartItemId: Contains
+@enduml
