@@ -1,0 +1,52 @@
+@startuml
+
+interface OrderService {
+    +makeOrder(user_id: int, books: List<OrderedBooksDTO>, paymentMethod: String): List<Order_Book>
+    +getOrders(): List<Orders>
+    +getOrder(order_id: int): Orders
+    +delOrder(order_id: int, user_id: int): int
+    +getOrdersByUser(user_id: int): List<Orders>
+}
+
+class OrderedBooksDTO {
+    +book_id: int
+    +quantity: int
+}
+
+class Books {
+    +id: int
+    +book_name: String
+    +description: String
+    +num_sales: int
+    +rates: int
+    +price: double
+    +quantity_in_stock: int
+    +image_url: String
+}
+
+class Order_Book {
+    +order_id: int
+    +book_id: int
+    +quantity: int
+}
+
+class Orders {
+    +id: int
+    +user: PlainUser
+    +order_date: Date
+}
+
+class PlainUser {
+    +id: int
+    +username: String
+    +password: String
+    +phone: int
+    +address: String
+}
+
+OrderService --> OrderedBooksDTO: Uses
+OrderService --> Orders: Uses
+OrderService --> Order_Book: Uses
+Orders --> PlainUser: Association
+Order_Book --> Books: Association
+@enduml

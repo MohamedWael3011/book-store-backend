@@ -1,0 +1,15 @@
+@startuml
+
+interface AuthorService {
+    +addAuthor(author: Author): Author
+    +getAuthors(): List<Author>
+    +getAuthorByName(name: String): Author
+}
+
+class Author {
+    +author_id: int
+    +name: String
+}
+
+AuthorService --> Author: Uses
+@enduml

@@ -1,0 +1,55 @@
+@startuml
+
+!define ENTITY class
+!define PRIMARY_KEY_FIELD {+ {field} primaryKey}
+!define FOREIGN_KEY_FIELD {+ {field} foreignKey}
+!define AGGREGATION ---
+
+' Define entities
+ENTITY OrderController {
+  orderService: OrderService
+  +makeOrder(userId: int, paymentMethod: String, books: List<OrderedBooksDTO>): ResponseEntity<?>
+  +cancelOrder(orderId: int, userId: int): ResponseEntity<?>
+  +getAllOrders(): ResponseEntity<?>
+  +getOrderUser(userId: int): ResponseEntity<?>
+}
+
+ENTITY OrderService {
+    {method}+getorder(order_id:int):Orders;
+  +makeOrder(userId: int, books: List<OrderedBooksDTO>, paymentMethod: String): List<Order_Book>
+  +delOrder(orderId: int, userId: int): int
+  +getOrders(): List<Order_Book>
+  +getOrdersByUser(userId: int): List<Order_Book>
+}
+
+ENTITY OrderedBooksDTO {
+    -book_id: int
+    -quantity: int
+
+  +OrderedBooksDTO(bookId: int, quantity: int): void
+  {method} +setBookId(bookId: int): void
+  {method} +getBookId(): int
+  {method} +setQuantity(quantity: int): void
+  {method} +getQuantity(): int
+}
+
+ENTITY Order_Book {
+  order_id: int primaryKey
+  book_id: int
+  quantity: int
+  +Order_Book(orderId: int, bookId: int, quantity: int): void
+  {method} +setOrderId(orderId: int): void
+  {method} +getOrderId(): int
+  {method} +setBookId(bookId: int): void
+  {method} +getBookId(): int
+  {method} +setQuantity(quantity: int): void
+  {method} +getQuantity(): int
+}
+
+
+' Define relationships
+OrderController --o OrderService: uses
+OrderService --o OrderedBooksDTO: uses
+OrderService --o Order_Book: returns (List)
+
+@enduml

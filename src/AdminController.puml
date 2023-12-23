@@ -1,0 +1,108 @@
+@startuml
+
+!define ENTITY class
+!define PRIMARY_KEY_FIELD {+ {field} primaryKey}
+!define FOREIGN_KEY_FIELD {+ {field} foreignKey}
+!define AGGREGATION ---
+
+' Define entities
+ENTITY GenreService {
+    {method}+delGenre(genreID:int):boolean;
+    {method}+addGenre(genre:Genre):Genre;
+    {method}+getGenres(): List<Genre>
+    {method}+getGenre(name: String): Genre
+}
+
+ENTITY BooksService {
+  {method}+ addbook(books:Books,authorID:int,genreID:int):Books
+  {method}+delbooks(book_id:int):void
+  {method}+editBook(books:Books):Books
+  {method}+getBooks():list<Books>
+  {method}+getBooks(book_id:int):Books
+  {method}+addStock(book_id:int,quantity:int):Books
+}
+
+ENTITY UsersService {
+  +delUser(user_id):void
+  +getUsers(): List<UserDTO>
+  +addUser(user: PlainUser): UserDTO
+  +getUser(user_id: int): UserDTO
+}
+
+ENTITY Genre {
+  genre_id: int primaryKey
+  genre: String unique
+
+  +Genre(genreId: int, genre: String): void
+  {method} +setGenreId(genreId: int): void
+  {method} +getGenreId(): int
+  {method} +setGenre(genre: String): void
+  {method} +getGenre(): String
+}
+
+ENTITY Books {
+  -id: int primaryKey
+  -book_name: String
+  -description: String
+  -num_sales: int
+  -rates: int
+  -price: double
+  -quantity_in_stock: int
+  -image_url: String
+  -genre: Genre
+  -cartItems: List<CartItem>
+  -author: Author
+  -reviews: List<Review>
+
+  +Books(id: int, bookName: String, description: String, numSales: int, rates: int, price: double, quantityInStock: int, imageUrl: String, genre: Genre, cartItems: List<CartItem>, author: Author, reviews: List<Review>): void
+  {method} +setId(id: int): void
+  {method} +getId(): int
+  {method} +setBookName(bookName: String): void
+  {method} +getBookName(): String
+  {method} +setDescription(description: String): void
+  {method} +getDescription(): String
+  {method} +setNumSales(numSales: int): void
+  {method} +getNumSales(): int
+  {method} +setRates(rates: int): void
+  {method} +getRates(): int
+  {method} +setPrice(price: double): void
+  {method} +getPrice(): double
+  {method} +setQuantityInStock(quantityInStock: int): void
+  {method} +getQuantityInStock(): int
+  {method} +setImageUrl(imageUrl: String): void
+  {method} +getImageUrl(): String
+  {method} +setGenre(genre: Genre): void
+  {method} +getGenre(): Genre
+  {method} +setCartItems(cartItems: List<CartItem>): void
+  {method} +getCartItems(): List<CartItem>
+  {method} +setAuthor(author: Author): void
+  {method} +getAuthor(): Author
+  {method} +setReviews(reviews: List<Review>): void
+  {method} +getReviews(): List<Review>
+}
+
+' ENTITY ResponseEntity {
+'   // Define attributes and methods for ResponseEntity
+' }
+
+ENTITY AdminController {
+  genreService: GenreService
+  booksService: BooksService
+  usersService: UsersService
+
+  +addGenre(genre: Genre): ResponseEntity<?>
+  +deleteGenre(genre_id: int): ResponseEntity<?>
+  +addBook(books: Books, author_id: int, genre_id: int): ResponseEntity<?>
+  +addStock(book_id: int, quantity: int): ResponseEntity<?>
+  +delBook(book_id: int): ResponseEntity<?>
+}
+
+' Define relationships
+AdminController --o GenreService: Uses
+AdminController --o BooksService: Uses
+AdminController --o UsersService: Uses
+' AdminController --o ResponseEntity: Uses
+AdminController --o Genre: Uses
+AdminController --o Books: Uses
+
+@enduml

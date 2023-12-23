@@ -1,0 +1,73 @@
+@startuml
+
+!define ENTITY class
+!define PRIMARY_KEY_FIELD {+ {field} primaryKey}
+!define FOREIGN_KEY_FIELD {+ {field} foreignKey}
+!define AGGREGATION ---
+
+' Define entities
+ENTITY UserController {
+  usersService: UsersService
+  proxyService: ProxyService
+
+  +UserController(): void
+  {method} +getAllBooks(): ResponseEntity<?>
+  {method} +addAuthor(user: PlainUser): ResponseEntity<?>
+  {method} +login(user: PlainUser): ResponseEntity<?>
+}
+
+ENTITY PlainUser {
+  id: int primaryKey
+  username: String
+  password: String
+  phone: int
+  address: String
+  reviews: List<Review>
+  orders: List<Orders>
+
+  +PlainUser(id: int, username: String, password: String, phone: int, address: String, reviews: List<Review>, orders: List<Orders>): void
+  {method} +setId(id: int): void
+  {method} +getId(): int
+  {method} +setUsername(username: String): void
+  {method} +getUsername(): String
+  {method} +setPassword(password: String): void
+  {method} +getPassword(): String
+  {method} +setPhone(phone: int): void
+  {method} +getPhone(): int
+  {method} +setAddress(address: String): void
+  {method} +getAddress(): String
+  {method} +setReviews(reviews: List<Review>): void
+  {method} +getReviews(): List<Review>
+  {method} +setOrders(orders: List<Orders>): void
+  {method} +getOrders(): List<Orders>
+}
+
+ENTITY UserDTO {
+    id: int
+  username: String
+  phone: int
+  address: String
+
+  +UserDTO(user: PlainUser): void
+  {method} +getId(): int
+  {method} +getUsername(): String
+  {method} +getPhone(): int
+  {method} +getAddress(): String
+}
+
+ENTITY UsersService {
+
+
++delUser(user_id):void
+  +getUsers(): List<UserDTO>
+  +addUser(user: PlainUser): UserDTO
+  +getUser(user_id: int): UserDTO
+}
+
+ENTITY ProxyService {
+  +login(user: PlainUser): Integer
+}
+
+' ResponseEntity --o UserController: has (0..*)
+
+@enduml

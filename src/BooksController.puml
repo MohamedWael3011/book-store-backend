@@ -1,0 +1,71 @@
+@startuml
+
+!define ENTITY class
+!define PRIMARY_KEY_FIELD {+ {field} primaryKey}
+!define FOREIGN_KEY_FIELD {+ {field} foreignKey}
+!define AGGREGATION ---
+
+' Define entities
+ENTITY BooksController {
+  +bookService: BooksService
+  +BooksController()
+  +getAllBooks(): ResponseEntity<?>
+  +editBook(books: Books): ResponseEntity<?>
+  +getBooks(book_id: int): ResponseEntity<?>
+}
+
+ENTITY BooksService {
+  
+  {method}+ addbook(books:Books,authorID:int,genreID:int):Books
+  {method}+delbooks(book_id:int):void
+  {method}+editBook(books:Books):Books
+  {method}+getBooks():list<Books>
+  {method}+getBooks(book_id:int):Books
+  {method}+addStock(book_id:int,quantity:int):Books
+}
+
+' ENTITY Books {
+'   book_id: int primaryKey
+'   book_name: String
+'   description: String
+'   num_sales: int
+'   rates: int
+'   price: float
+'   image_url: String
+'   genre: String
+'   quantity_in_stock: int
+'   author_id: int foreignKey
+
+'   +Books(bookId: int, bookName: String, description: String, numSales: int, rates: int, price: float, imageUrl: String, genre: String, quantityInStock: int, authorId: int): void
+'   {method} +setBookId(bookId: int): void
+'   {method} +getBookId(): int
+'   {method} +setBookName(bookName: String): void
+'   {method} +getBookName(): String
+'   {method} +setDescription(description: String): void
+'   {method} +getDescription(): String
+'   {method} +setNumSales(numSales: int): void
+'   {method} +getNumSales(): int
+'   {method} +setRates(rates: int): void
+'   {method} +getRates(): int
+'   {method} +setPrice(price: float): void
+'   {method} +getPrice(): float
+'   {method} +setImageUrl(imageUrl: String): void
+'   {method} +getImageUrl(): String
+'   {method} +setGenre(genre: String): void
+'   {method} +getGenre(): String
+'   {method} +setQuantityInStock(quantityInStock: int): void
+'   {method} +getQuantityInStock(): int
+'   {method} +setAuthorId(authorId: int): void
+'   {method} +getAuthorId(): int
+' }
+
+ENTITY ResponseEntity {
+'   // Define ResponseEntity methods if needed
+}
+
+' Define relationships
+BooksController --o BooksService: has
+' BooksController --o Books: has
+BooksController -- ResponseEntity
+
+@enduml

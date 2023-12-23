@@ -1,0 +1,67 @@
+@startuml
+
+!define ENTITY class
+!define PRIMARY_KEY_FIELD {+ {field} primaryKey}
+!define FOREIGN_KEY_FIELD {+ {field} foreignKey}
+!define AGGREGATION ---
+
+' Define entities
+ENTITY BooksServiceImpl {
+  instance: BooksService
+  booksRepository: BooksRepository
+  authorRepository: AuthorRepository
+  genreRepository: GenreRepository
+}
+
+ENTITY BooksRepository {
+  <<JpaRepository>>
+  findAll(): List<Books>
+  findById(bookID: int): Books
+  deleteById(bookID: int): void
+  save(books: Books): Books
+  saveAndFlush(book: Books): Books
+}
+
+ENTITY AuthorRepository {
+  <<JpaRepository>>
+  findById(authorID: int): Author
+  findByName(name: String): Author
+}
+
+ENTITY GenreRepository {
+  <<JpaRepository>>
+  findById(genreID: int): Genre
+}
+
+ENTITY Books {
+  id: int primaryKey
+  book_name: String
+  description: String
+  num_sales: int
+  rates: int
+  price: double
+  quantity_in_stock: int
+  image_url: String
+  genre: Genre
+  author: Author
+}
+
+ENTITY Author {
+  author_id: int primaryKey
+  name: String
+}
+
+ENTITY Genre {
+  genre_id: int primaryKey
+  genre: String
+}
+
+' Define relationships
+BooksServiceImpl -- BooksRepository: uses
+BooksServiceImpl -- AuthorRepository: uses
+BooksServiceImpl -- GenreRepository: uses
+
+Books --o Author: belongs to
+Books --o Genre: belongs to
+
+@enduml

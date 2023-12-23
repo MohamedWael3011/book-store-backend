@@ -181,6 +181,28 @@ ENTITY SaltedUser {
 
 }
 
+ENTITY Cart {
+  cart_id : int primaryKey
+  user_id : int foreignKey
+  {method} +setId(id: int): void
+  {method} +getId(): int
+  {method} +setuserId(userId: int): void
+  {method} +getuserId(): int
+
+}
+
+ENTITY cart_item {
+  cart_id : int foreignKey
+  book_id : int foreignKey 
+  quantity : int
+  {method} +setcartId(cartId: int): void
+  {method} +getcartId(): int
+  {method} +setbookId(bookId: int): void
+  {method} +getbookId(): int
+  {method} +setquantityId(quantityId: int): void
+  {method} +getquantityId(): int
+}
+
 ' Define relationships
 Author --o Books: has (0..*)
 Books --o Order_Book: has (1..*)
@@ -192,8 +214,10 @@ Orders --o Order_Book: has (0..*)
 Orders --o Payment: has (0..*)
 PlainUser --o Review: has (0..*)
 PlainUser --o Orders: has (0..*)
+PlainUser --o Cart: has (0..*)
+cart_item --o Books: has (0..*)
+cart_item --o Cart: has (0..*)
 PlainUser <|-- SaltedUser
-
 
 
 @enduml

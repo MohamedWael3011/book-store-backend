@@ -1,0 +1,69 @@
+@startuml
+
+!define ENTITY class
+!define PRIMARY_KEY_FIELD {+ {field} primaryKey}
+!define FOREIGN_KEY_FIELD {+ {field} foreignKey}
+!define AGGREGATION ---
+
+' Define entities
+ENTITY CartServiceImpl {
+  userRepository: UsersRepository
+  cartRepository: CartRepository
+  cartItemRepository: CartItemRepository
+  booksRepository: BooksRepository
+  usersRepository: UsersRepository
+}
+
+ENTITY UsersRepository {
+  <<JpaRepository>>
+  findById(user_id: int): SaltedUser
+}
+
+ENTITY CartRepository {
+  <<JpaRepository>>
+  save(cart: Cart): Cart
+}
+
+ENTITY CartItemRepository {
+  <<JpaRepository>>
+  findById(cart_id: int, book_id: int): CartItem
+  delete(cartItem: CartItem): void
+  save(cartItem: CartItem): CartItem
+}
+
+ENTITY BooksRepository {
+  <<JpaRepository>>
+  findById(book_id: int): Books
+}
+
+ENTITY SaltedUser {
+  id: int primaryKey
+}
+
+ENTITY Cart {
+  id: int primaryKey
+  user: SaltedUser
+}
+
+ENTITY CartItem {
+  cart: Cart
+  book: Books
+  quantity: int
+}
+
+ENTITY Books {
+  id: int primaryKey
+}
+
+' Define relationships
+CartServiceImpl -- SaltedUser: uses
+CartServiceImpl -- CartRepository: uses
+CartServiceImpl -- CartItemRepository: uses
+CartServiceImpl -- BooksRepository: uses
+CartServiceImpl -- UsersRepository: uses
+
+Cart --o SaltedUser: has
+CartItem --o Cart: belongs to
+CartItem --o Books: belongs to
+
+@enduml
