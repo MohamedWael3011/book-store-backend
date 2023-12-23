@@ -1,0 +1,29 @@
+@startuml
+
+!define ENTITY class
+!define PRIMARY_KEY_FIELD {+ {field} primaryKey}
+!define FOREIGN_KEY_FIELD {+ {field} foreignKey}
+!define AGGREGATION ---
+
+' Define entities
+ENTITY AuthorServiceImpl {
+  authorRepository: AuthorRepository
+}
+
+ENTITY AuthorRepository {
+  <<JpaRepository>>
+  findAll(): List<Author>
+  findByName(name: String): Author
+  save(author: Author): Author
+}
+
+ENTITY Author {
+  author_id: int primaryKey
+  name: String
+}
+
+' Define relationships
+AuthorServiceImpl -- AuthorRepository: uses
+AuthorRepository -- Author: uses
+
+@enduml

@@ -1,0 +1,48 @@
+@startuml
+
+!define ENTITY class
+!define PRIMARY_KEY_FIELD {+ {field} primaryKey}
+!define FOREIGN_KEY_FIELD {+ {field} foreignKey}
+!define AGGREGATION ---
+
+' Define entities
+ENTITY ReviewController {
+  reviewService: ReviewService
+
+  +ReviewController(): void
+  {method} +getAllReviews(): ResponseEntity<?>
+  {method} +addBook(review: Review, userId: int, bookId: int): ResponseEntity<?>
+  {method} +getAllBookReviews(bookId: int): ResponseEntity<?>
+  {method} +getAllUserReviews(userId: int): ResponseEntity<?>
+}
+
+ENTITY Review {
+  review_id: int primaryKey
+  user_id: int foreignKey
+  book_id: int foreignKey
+  review_content: String
+  rating: float
+
+  +Review(reviewId: int, userId: int, bookId: int, reviewContent: String, rating: float): void
+  {method} +setReviewId(reviewId: int): void
+  {method} +getReviewId(): int
+  {method} +setUserId(userId: int): void
+  {method} +getUserId(): int
+  {method} +setBookId(bookId: int): void
+  {method} +getBookId(): int
+  {method} +setReviewContent(reviewContent: String): void
+  {method} +getReviewContent(): String
+  {method} +setRating(rating: float): void
+  {method} +getRating(): float
+}
+
+ENTITY ReviewService {
+  {method}+getReviews():List<Review>
+  {method}+addReview(review: Review, userId: int, bookId: int):Review
+  {method}+getBookReviews(bookId: int):List<Review>
+  {method}+getReviewsByUser(userId: int): List<Review>
+}
+
+' ResponseEntity --o ReviewController: has (0..*)
+
+@enduml

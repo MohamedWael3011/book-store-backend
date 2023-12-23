@@ -1,0 +1,38 @@
+@startuml
+
+interface UsersService {
+    +addUser(user: PlainUser): UserDTO
+    +delUser(user_id: int): void
+    +getUsers(): List<UserDTO>
+    +getUser(user_id: int): UserDTO
+}
+
+class UserDTO {
+    +id: int
+    +username: String
+    +phone: int
+    +address: String
+}
+
+class PlainUser {
+    +id: int
+    +username: String
+    +password: String
+    +phone: int
+    +address: String
+}
+
+class SaltedUser {
+    +id: int
+    +username: String
+    +password: String
+    +salt: String
+    +phone: int
+    +address: String
+}
+
+UsersService --> UserDTO: Uses
+UsersService --> PlainUser: Uses
+UsersService --> SaltedUser: Uses
+
+@enduml

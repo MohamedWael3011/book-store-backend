@@ -1,0 +1,24 @@
+@startuml
+
+interface BooksService {
+    +addBook(books: Books, authorID: int, genreID: int): Books
+    +delBook(bookID: int): void
+    +editBook(book: Books): Books
+    +getBooks(): List<Books>
+    +getBook(bookID: int): Books
+    +addStock(book_id: int, quantity: int): Books
+}
+
+class Books {
+    +id: int
+    +book_name: String
+    +description: String
+    +num_sales: int
+    +rates: int
+    +price: double
+    +quantity_in_stock: int
+    +image_url: String
+}
+
+BooksService --> Books: Uses
+@enduml

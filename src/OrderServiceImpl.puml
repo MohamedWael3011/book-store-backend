@@ -1,0 +1,49 @@
+@startuml
+
+class OrderServiceImpl {
+    -orderBookRepository: OrderBookRepository
+    -ordersRepository: OrdersRepository
+    -paymentRepository: PaymentRepository
+    -usersRepository: UsersRepository
+    -booksService: BooksService
+    +makeOrder(user_id: int, books: List<OrderedBooksDTO>, paymentMethod: String): List<Order_Book>
+    +getOrders(): List<Orders>
+    +getOrder(order_id: int): Orders
+    +delOrder(order_id: int, user_id: int): int
+    +getOrdersByUser(user_id: int): List<Orders>
+}
+
+class Orders {
+    +id: int
+    +user: SaltedUser
+    +order_date: Date
+    +orderBooks: List<Order_Book>
+    +payment: Payment
+}
+
+class Payment {
+    +id: int
+    +order: Orders
+    +payment_method: String
+    +payment_amount: double
+}
+
+class Order_Book {
+    +order_id: int
+    +book_id: int
+    +quantity: int
+    +order: Orders
+}
+
+class OrderedBooksDTO {
+    +book_id: int
+    +quantity: int
+}
+
+OrderServiceImpl --o Orders
+Orders "1" --o "0..*" Order_Book
+Orders --o Payment
+Order_Book --o Books
+OrderedBooksDTO --o Books
+
+@enduml
