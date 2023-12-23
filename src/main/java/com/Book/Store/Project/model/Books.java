@@ -6,10 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
@@ -20,22 +17,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Books  {
-    @Override
-    public String toString() {
-        return "Books{" +
-                "id=" + id +
-                ", book_name='" + book_name + '\'' +
-                ", description='" + description + '\'' +
-                ", num_sales=" + num_sales +
-                ", rates=" + rates +
-                ", price=" + price +
-                ", quantity_in_stock=" + quantity_in_stock +
-                ", image_url='" + image_url + '\'' +
-                ", genre=" + genre +
-                ", author=" + author +
-                ", reviews=" + reviews +
-                '}';
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,6 +35,7 @@ public class Books  {
     Genre genre;
 
     @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<CartItem> cartItems;
     @ManyToOne(fetch = FetchType.EAGER,cascade = CascadeType.PERSIST)
     @JoinColumn(name = "author_id")

@@ -2,6 +2,7 @@ package com.Book.Store.Project.service.implementation;
 
 import com.Book.Store.Project.model.Author;
 import com.Book.Store.Project.model.Books;
+import com.Book.Store.Project.model.Genre;
 import com.Book.Store.Project.repository.AuthorRepository;
 import com.Book.Store.Project.repository.GenreRepository;
 import com.Book.Store.Project.service.BooksService;
@@ -35,7 +36,7 @@ public class BooksServiceImpl implements BooksService {
     @Override
     public Books addBook(Books books,int authorID,int genreID) {
         books.setAuthor(authorRepository.findById(authorID).orElseThrow(() -> {
-            return new RuntimeException("There is no Book with this ID");}));
+            return new RuntimeException("There is no Author with this ID");}));
         books.setGenre(genreRepository.findById(genreID).orElseThrow(() -> {
             return new RuntimeException("There is no Genre with this ID");}));
 
@@ -52,7 +53,6 @@ public class BooksServiceImpl implements BooksService {
 
     @Override
     public Books editBook(Books book) {
-        System.out.println(book);
         Books b = booksRepository.findById(book.getId()).orElseThrow(() -> {
             return new RuntimeException("There is no Book with this ID");
         });
@@ -82,5 +82,11 @@ public class BooksServiceImpl implements BooksService {
         book.setQuantity_in_stock(book.getQuantity_in_stock() + quantity);
         return booksRepository.save(book);
 
+    }
+
+    @Override
+    public List<Books> getByGenre(String genreName) {
+        Genre genre = genreRepository.findByName(genreName);
+        return  booksRepository.findByGenre(genre);
     }
 }

@@ -20,12 +20,10 @@ public class GenreInterfaceImpl implements GenreService {
     }
 
     @Override
-    public boolean delGenre(int genreID) {
-        Optional<Genre> genreOptional = genreRepository.findById(genreID);
-
-        if (genreOptional.isPresent()) {
-            Genre genre = genreOptional.get();
-            genreRepository.deleteById(genreID);
+    public boolean delGenre(String genreID) {
+        Genre genreOptional = genreRepository.findByName(genreID);
+        if (genreOptional != null){
+            genreRepository.delete(genreOptional);
             return true;
         } else {
             return false;

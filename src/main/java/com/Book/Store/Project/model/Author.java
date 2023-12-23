@@ -31,6 +31,8 @@ public class Author {
     int author_id;
     @Column(name = "author_name")
     String name;
+
+    String author_description;
     @OneToMany(mappedBy = "author")
     @JsonIgnore
     Set<Books> books;

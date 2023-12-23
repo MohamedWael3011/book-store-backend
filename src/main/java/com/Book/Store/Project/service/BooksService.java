@@ -11,4 +11,5 @@ public interface BooksService {
     List<Books> getBooks();
     Books getBook(int bookID);
     Books addStock(int book_id,int quantity);
+    List<Books> getByGenre(String genreName);
 }

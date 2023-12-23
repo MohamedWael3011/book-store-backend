@@ -1,8 +1,10 @@
 package com.Book.Store.Project.controller;
 
 
+import com.Book.Store.Project.DTO.OrderedBooksDTO;
 import com.Book.Store.Project.DTO.UserDTO;
 import com.Book.Store.Project.model.Users.PlainUser;
+import com.Book.Store.Project.service.CartService;
 import com.Book.Store.Project.service.ProxyService;
 import com.Book.Store.Project.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -22,6 +25,9 @@ public class UserController {
     private UsersService usersService;
     @Autowired
     private ProxyService proxyService;
+
+    @Autowired
+    private CartService cartService;
 
 
     @GetMapping("/all/users")
@@ -56,5 +62,19 @@ public class UserController {
             return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
         }
 
+    }
+
+    @GetMapping("/cart")
+    public  ResponseEntity<?>getCart(@RequestParam("user_id") int user_id){
+        return  new ResponseEntity<>(cartService.getCart(user_id),HttpStatus.OK);
+    }
+
+    @PostMapping("/cart/add")
+    public  ResponseEntity<?>addCart(@RequestParam("user_id") int user_id, @RequestBody OrderedBooksDTO orderedBooksDTO){
+        return  new ResponseEntity<>(cartService.addItem(user_id,orderedBooksDTO),HttpStatus.OK);
+    }
+    @DeleteMapping("/cart/del")
+    public  ResponseEntity<?>delCart(@RequestParam("cart_id") int cart_id, @RequestParam("book_id") int book_id){
+        return  new ResponseEntity<>(cartService.removeItem(cart_id,book_id),HttpStatus.OK);
     }
 }

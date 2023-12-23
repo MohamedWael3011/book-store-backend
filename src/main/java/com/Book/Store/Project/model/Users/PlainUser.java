@@ -42,6 +42,7 @@ public class PlainUser {
     List<Orders> orders;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
     private Cart cart;
 
 

@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table
@@ -24,11 +25,17 @@ public class Orders {
     private int id;
 
     private Date order_date;
-    private String order_status;
+    @Column(name = "order_status")
+    private String orderStatus;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     SaltedUser user;
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Payment payment;
+
+    String user_address;
+    String user_city;
+    String user_buildingno;
+    String user_phone;
 
 }

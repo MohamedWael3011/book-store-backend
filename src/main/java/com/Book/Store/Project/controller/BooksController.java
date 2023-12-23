@@ -34,4 +34,9 @@ public class BooksController {
         return new ResponseEntity<>(bookService.getBook(book_id), HttpStatus.OK);
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<?> getBooksByGenre(@RequestParam("genre_name")String genre_name){
+        return new ResponseEntity<>(bookService.getByGenre(genre_name), HttpStatus.OK);
+    }
+
 }

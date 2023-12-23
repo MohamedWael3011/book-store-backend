@@ -1,6 +1,7 @@
 package com.Book.Store.Project.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,6 +24,7 @@ public class Payment {
     private double payment_amount;
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", unique = true)
+    @JsonIgnore
     private Orders order;
 
 }

@@ -2,6 +2,7 @@ package com.Book.Store.Project.controller;
 
 
 import com.Book.Store.Project.DTO.OrderedBooksDTO;
+import com.Book.Store.Project.DTO.ShippingInfoDTO;
 import com.Book.Store.Project.model.Order_Book;
 import com.Book.Store.Project.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,14 @@ public class OrderController {
     OrderService orderService;
 
     @PostMapping("/makeorder")
-    ResponseEntity<?> makeOrder(@RequestParam(name = "user_id") int user_id, @RequestParam(name = "payment_method") String payment_method, @RequestBody List<OrderedBooksDTO> books){
-        List<Order_Book> orders = orderService.makeOrder(user_id,books,payment_method);
+    ResponseEntity<?> makeOrder(@RequestParam(name = "user_id") int user_id, @RequestParam(name = "payment_method") String payment_method,
+                                @RequestBody List<OrderedBooksDTO> books,
+                                @RequestParam(name = "address") String address,
+                                @RequestParam(name = "city") String city,
+                                @RequestParam(name = "building") String building,
+                                @RequestParam(name = "phone") String phone
+                                ){
+        List<Order_Book> orders = orderService.makeOrder(user_id,books,payment_method,new ShippingInfoDTO(address,city,building,phone));
         if (orders == null){
             return new ResponseEntity<>("Invalid Transaction", HttpStatus.NOT_ACCEPTABLE);
         }
@@ -48,6 +55,10 @@ public class OrderController {
     @GetMapping("/get/all")
     ResponseEntity<?> getAllOrders(){
         return  new ResponseEntity<>(orderService.getOrders(),HttpStatus.OK);
+    }
+    @GetMapping("/get")
+    ResponseEntity<?> getOrdersStatus(@RequestParam("status") String status){
+        return  new ResponseEntity<>(orderService.getPendingOrders(status),HttpStatus.OK);
     }
     @GetMapping("/get/byUser")
     ResponseEntity<?> getOrderUser(@RequestParam(name = "user_id") int user_id){

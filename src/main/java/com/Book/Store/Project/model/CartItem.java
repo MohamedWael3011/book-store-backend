@@ -15,6 +15,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CartItem {
+
     @EmbeddedId
     private CartItemId id;
 

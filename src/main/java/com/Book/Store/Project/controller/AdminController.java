@@ -31,7 +31,7 @@ public class AdminController {
 
     }
     @DeleteMapping("/delete/genre")
-    public ResponseEntity<?> deleteGenre(@RequestParam("genre_id") int genre_id){
+    public ResponseEntity<?> deleteGenre(@RequestParam("genre_name") String genre_id){
         return new ResponseEntity<>(genreService.delGenre(genre_id), HttpStatus.OK);
     }
     @PostMapping("/add/book")

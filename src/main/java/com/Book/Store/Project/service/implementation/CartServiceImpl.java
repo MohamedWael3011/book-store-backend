@@ -14,6 +14,7 @@ import com.Book.Store.Project.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -34,30 +35,60 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public CartItem addItem(int user_id,OrderedBooksDTO book) {
+        System.out.println(book);
         Optional<SaltedUser> user =  usersRepository.findById(user_id);
-        Cart cart = new Cart();
+
+
         if(user.isEmpty()){
             return null;
         }
-        cart.setUser(user.get());
-        Cart userCart = cartRepository.save(cart);
+        Cart userCart = cartRepository.findByUser(user.get());
+        if(userCart== null){
+            Cart cart = new Cart();
+
+            cart.setUser(user.get());
+            userCart = cartRepository.save(cart);
+        }
+        System.out.println(userCart);
+
         CartItem cartItem = new CartItem();
         cartItem.setCart(userCart);
         cartItem.setQuantity(book.getQuantity());
-        Optional<Books> b = booksRepository.findById(book.getBook_id());
+        System.out.println("Book ID: " + book.getBook_id());
+        int bid = book.getBook_id();
+        Optional<Books> b = booksRepository.findById(bid);
         if(b.isEmpty()){
             return null;
         }
         cartItem.setBook(b.get());
+
+        cartItem.setId(new CartItemId(userCart.getCartId(),bid));
         return cartItemRepository.save(cartItem);
 
 
     }
 
     @Override
-    public void removeItem(int cart_id, int book_id) {
+    public boolean removeItem(int cart_id, int book_id) {
         CartItemId cid = new CartItemId(cart_id,book_id);
         Optional<CartItem> cartItem = cartItemRepository.findById(cid);
-        cartItem.ifPresent(item -> cartItemRepository.delete(item));
+        if(cartItem.isPresent()){
+
+            cartItemRepository.delete(cartItem.get());
+            return true;
+        }
+        return  false;
+    }
+
+    @Override
+    public List<CartItem> getCart(int user_id) {
+        Optional<SaltedUser> user = usersRepository.findById(user_id);
+        if (user.isPresent()) {
+            Cart cart = cartRepository.findByUser(user.get());
+            return cartItemRepository.findByCart(cart);
+
+
+        }
+        return null;
     }
 }

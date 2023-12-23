@@ -1,11 +1,11 @@
 package com.Book.Store.Project.service.implementation;
 
 import com.Book.Store.Project.DTO.OrderedBooksDTO;
+import com.Book.Store.Project.DTO.ShippingInfoDTO;
 import com.Book.Store.Project.model.Books;
 import com.Book.Store.Project.model.Order_Book;
 import com.Book.Store.Project.model.Orders;
 import com.Book.Store.Project.model.Payment;
-import com.Book.Store.Project.model.Users.PlainUser;
 import com.Book.Store.Project.model.Users.SaltedUser;
 import com.Book.Store.Project.repository.OrderBookRepository;
 import com.Book.Store.Project.repository.OrdersRepository;
@@ -36,7 +36,7 @@ public class OrderServiceImpl implements OrderService {
     BooksService booksService;
 
     @Override
-    public List<Order_Book> makeOrder(int user_id, List<OrderedBooksDTO> books, String paymentMethod) {
+    public List<Order_Book> makeOrder(int user_id, List<OrderedBooksDTO> books, String paymentMethod, ShippingInfoDTO shipping) {
         Optional<SaltedUser> user =  usersRepository.findById(user_id);
         Orders order = new Orders();
         if(user.isEmpty()){
@@ -45,6 +45,14 @@ public class OrderServiceImpl implements OrderService {
 
         order.setUser(user.get());
         order.setOrder_date(Date.from(Instant.now()));
+        order.setUser_address(shipping.getUser_address());
+        order.setUser_city(shipping.getUser_city());
+        order.setUser_buildingno(shipping.getUser_buildingno());
+        order.setUser_phone(shipping.getUser_phone());
+        order.setOrderStatus("Pending Approval");
+
+
+
         Orders madeOrder = ordersRepository.save(order);
         List<Order_Book> orders = new ArrayList<>();
         books.forEach(book -> {
@@ -85,6 +93,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public List<Orders> getPendingOrders(String status) {
+        return ordersRepository.findAllByOrderStatus(status);
+    }
+
+    @Override
     public Orders getOrder(int order_id) {
         Optional<Orders> order =  ordersRepository.findById(order_id);
         return order.orElse(null);
@@ -107,6 +120,8 @@ public class OrderServiceImpl implements OrderService {
                     % 365;
 
             if(difference_In_Days <= 2) {
+                List<Order_Book> orderBooks = orderBookRepository.findByOrderId(order_id);
+                orderBookRepository.deleteAll(orderBooks);
                 ordersRepository.deleteById(order_id);
                 return 1;
             }
@@ -114,6 +129,21 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
+    @Override
+    public int acceptOrder(int order_id, int user_id) {
+        Orders order = getOrder(order_id);
+        if(order == null){
+            return -1;
+        }
+        else if(order.getUser().getId() != user_id){
+            return 0;
+        }
+        else{
+            order.setOrderStatus("Accepted");
+            ordersRepository.saveAndFlush(order);
+            return 1;
+        }
+    }
     @Override
     public List<Orders> getOrdersByUser(int user_id) {
         Optional<SaltedUser> orderUser = usersRepository.findById(user_id);

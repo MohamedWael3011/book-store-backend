@@ -28,7 +28,7 @@ public class ReviewServiceImpl implements ReviewService {
         Books b = booksRepository.findById(bookID).orElseThrow(() -> { return new RuntimeException("There is no Book with this ID");});
         review.setBook(b);
         review.setUser(u);
-        return null;
+        return reviewRepository.save(review);
     }
 
     @Override
